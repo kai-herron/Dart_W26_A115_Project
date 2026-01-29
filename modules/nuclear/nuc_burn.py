@@ -33,21 +33,12 @@ def burn(temp: float, rho: float, time: float):
     solver_ctx = GridSolverContext(construct.scratch_blob)
     results = grid_solver.evaluate(solver_ctx, netIns)
  
-    energies = []
-    molars = []
+    epsilon = []
+    mu = []
     for i,j in enumerate(results):
-        energies.append(j.energy)
-        molars.append(j.composition.getMeanParticleMass())
-    return energies, molars
+        epsilon.append(j.energy)
+        mu.append(j.composition.getMeanParticleMass())
+    return epsilon, mu
 
-    
-    #plt.plot(temps,energies)
-    #plt.xlabel('Temperature [K]')
-    #plt.ylabel('Energy [erg/g]')
-    #plt.savefig('../../output/plots/temp-vs-energy.png')
-    #plt.clf()
-    #plt.plot(rhos,energies)
-    #plt.xlabel('Density [g/cm^3]')
-    #plt.ylabel('Energy [erg/g]')
-    #plt.savefig('../../output/plots/density-vs-energy.png')
+
 

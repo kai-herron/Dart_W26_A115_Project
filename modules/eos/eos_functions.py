@@ -26,7 +26,7 @@ def init_U(mu, dM, T):
     mh, kB, a, R = constants()
     dM = np.asarray(dM, dtype=float)
     T = np.asarray(T, dtype=float)
-    n = mu/dM # number of moles 
+    n = dM / mu 
     Cv = (3/2)*R # specific heat at constant volume for a monatomic ideal gas
     U_init = n*Cv*T # specific internal energy in erg
     U_init = np.asarray(U_init, dtype=float)
@@ -48,7 +48,8 @@ def temperature_solver(dM, mu, U):
     """
     mh, kB, a, R = constants()
     Cv = (3/2)*R # specific heat at constant volume for a monatomic ideal gas 
-    n = mu/dM # number of moles 
+    n = dM / mu  
+
     T = U/(n*Cv) # in Kelvin 
     T = np.asarray(T, dtype=float)
     return T 

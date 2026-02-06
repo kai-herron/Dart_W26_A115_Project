@@ -1,3 +1,7 @@
+IMPORTANT !!! MUST HAVE THE DEVELOPER VERSION OF GRIDFIRE INSTALLED:
+# RUN:
+# pip install --index-url https://git.algebrist.com/api/packages/tboudreaux/pypi/simple/ gridfire
+
 -----------------------------------------------------------------------------------------------
 nuc_burn.py is the main script with only functions defined. the burn() function is the only function you need from here. 
 you should import nuc_burn at the top of your script.

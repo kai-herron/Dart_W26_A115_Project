@@ -21,7 +21,23 @@ def init_netIn(temp: float, rho: float, time: float, comp: Composition) -> NetIn
     netIn.composition = comp
     return netIn
 
+def getCanonicalComposition(massFrac):
+    Hspec = ['H-1','H-2','H-3']
+    Hespec = ['He-3','He-4']
 
+    X = []
+    for H in Hspec:
+        X.append(massFrac.getMassFraction(H))
+
+    Y = []
+    for He in Hespec:
+        Y.append(massFrac.getMassFraction(He))
+
+    X = np.sum(X)
+    Y = np.sum(Y)
+
+    Z = 1 - (X+Y)
+    return X, Y, Z
 
 # 'temp', 'rho', and 'comp' should be arrays. 'time' is your time step in seconds. 
 # burn() outputs the delta energy, mean molecular mass, and mass fraction results for your given time step.

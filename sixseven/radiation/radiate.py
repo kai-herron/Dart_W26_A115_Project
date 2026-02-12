@@ -11,14 +11,18 @@ import logging
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 from pathlib import Path
-from modules.nuclear import nuc_burn
+from sixseven.nuclear import nuc_burn
 
 
+# Global Variables
 # Global Variables
 REPO_DIR = str(Path(__file__).resolve().parent.parent.parent)
 CONSTANTS = {'G': 6.674e-8}   
 
+CONSTANTS = {'G': 6.674e-8}   
 
+
+def kramer_opacity(rho, T, t, massFrac):
 def kramer_opacity(rho, T, t, massFrac):
     '''
     Implementation of the Kramer opacity law. 
@@ -27,6 +31,17 @@ def kramer_opacity(rho, T, t, massFrac):
     :param T: temperature (units: Kelvin)
 
     '''
+    # compute compositions
+    X, Y, Z = nuc_burn.getCanonicalComposition(massFrac)
+
+    # compute the three opacities
+    bf = (4.34e25) * (1 + X) * Z * rho * (T**(-7/2))
+    ff = (3.68e22) * (1 - Z) * (1 + X) * rho * (T**(-7/2))
+    ts = 0.3 * (1 + X)
+
+    # sum all opacity sources together
+    sum = bf + ff + ts
+    return sum
     # compute compositions
     X, Y, Z = nuc_burn.getCanonicalComposition(massFrac)
 
@@ -55,9 +70,23 @@ def plot_kramer_sun(filename,delRho=10,delT=100, **kwargs):
     ar_shape = xx.shape
     Time = 1000
     e, mu, mf = nuc_burn.burn(xx.flatten(), yy.flatten(), Time)
+    temps = np.linspace(1.5e7, 2e7, 100)
+    rhos = np.linspace(1.5e2, 1.5e2, 100)
+    xx, yy = np.meshgrid(temps,rhos)
+    ar_shape = xx.shape
+    Time = 1000
+    e, mu, mf = nuc_burn.burn(xx.flatten(), yy.flatten(), Time)
 
     _ = plt.figure(figsize=(8,7),dpi=500)
+    _ = plt.figure(figsize=(8,7),dpi=500)
     taus = []
+    #for rho in rhos:
+    #    tau = kramer_opacity(rho,temps,Time,mf)
+    #    taus.append(tau)
+    taus = kramer_opacity(xx.flatten(),yy.flatten(),Time,mf)
+
+    plt.contourf(xx.reshape(ar_shape), yy.reshape(ar_shape),taus.reshape(ar_shape))
+
     #for rho in rhos:
     #    tau = kramer_opacity(rho,temps,Time,mf)
     #    taus.append(tau)
@@ -69,6 +98,8 @@ def plot_kramer_sun(filename,delRho=10,delT=100, **kwargs):
     plt.yscale('log')
     
     plt.xlabel('Temperature (K)')
+    plt.ylabel('Density (g cm$^{-3}$)')
+    plt.colorbar(label='Opacity, $\\tau$')
     plt.ylabel('Density (g cm$^{-3}$)')
     plt.colorbar(label='Opacity, $\\tau$')
 

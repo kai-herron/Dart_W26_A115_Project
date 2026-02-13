@@ -1,6 +1,6 @@
 Transport Module 
 
-test_transport_new.py is the main script for compositional transport. 
+transport_simple.py is the main script for compositional transport. 
 The only function you should need from this file is:
 
     transport_step(X, structure, dt)

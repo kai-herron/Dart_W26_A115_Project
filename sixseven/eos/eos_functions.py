@@ -1,6 +1,6 @@
 import numpy as np
 from dataclasses import dataclass 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class _CONST: 
     """
     Dataclass defining the constants necessary for the EoS module
